@@ -1,0 +1,114 @@
+﻿@model BookShopMVCmidExam_1280425.Models.ViewModels.BooksViewModel
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit</h2>
+@using (Html.BeginForm("Edit", "Book", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(e => e.BookId)
+    @Html.HiddenFor(e => e.Picture)
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group row">
+                @Html.LabelFor(e => e.BookName, htmlAttributes: new { @class = "control-label col-3" })
+                <div class="col-9 mb-2">
+                    @Html.EditorFor(e => e.BookName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(e => e.BookName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group row">
+                @Html.LabelFor(e => e.AuthorName, htmlAttributes: new { @class = "control-label col-3" })
+                <div class="col-9 mb-2">
+                    @Html.EditorFor(e => e.AuthorName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(e => e.AuthorName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group row">
+                @Html.LabelFor(e => e.PublishDate, htmlAttributes: new { @class = "control-label col-3" })
+                <div class="col-9 mb-2">
+                    @Html.EditorFor(e => e.PublishDate, "{0:yyyy-MM-dd}", new { htmlAttributes = new { @class = "form-control", Type = "date" } })
+                    @Html.ValidationMessageFor(e => e.PublishDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group row">
+                @Html.LabelFor(e => e.EmailAddress, htmlAttributes: new { @class = "control-label col-3" })
+                <div class="col-9 mb-2">
+                    @Html.EditorFor(e => e.EmailAddress, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(e => e.EmailAddress, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group row">
+                @Html.LabelFor(e => e.Price, htmlAttributes: new { @class = "control-label col-3" })
+                <div class="col-9 mb-2">
+                    @Html.EditorFor(e => e.Price, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(e => e.Price, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group row">
+                @Html.LabelFor(e => e.InStock, htmlAttributes: new { @class = "control-label col-3" })
+                <div class="col-9 mb-2">
+                    <div class="checkbox">
+                        @Html.EditorFor(e => e.InStock)
+                        @Html.ValidationMessageFor(e => e.InStock, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-3">
+                    <img src="~/Images/noimage.png" id="ImgFile" width="80" height="80" class="rounded" />
+                </div>
+                <div class="col-9">
+                    <input type="file" id="upimage" class="upimage" name="PicturePath" style="display:none" onchange="readUrl(this);" />
+                    <label for="upimage" class="labelupimage">Upload Image</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <h2>Select Genre</h2>
+            <div class="d-flex justify-content-end mb-2">
+                <a href="#" id="btnPlus" style="width:90px" class="btn btn-warning mr-2">Add</a>
+            </div>
+            <div id="Container">
+                @Html.Action("AddNewGenres", "Book")
+            </div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-end offset-10">
+        <input type="submit" value="Update" class="btn btn-primary" />
+    </div>
+}
+<script src="~/Scripts/jquery-3.7.1.js"></script>
+<script>
+    function readUrl(input) {
+        if (input.files && input.files[0]) {
+            var rdr = new FileReader();
+            rdr.onload = function (e) {
+                $('#ImgFile').attr('src', e.target.result);
+            };
+            rdr.readAsDataURL(input.files[0]);
+        }
+    }
+    $('#btnPlus').click(function (e) {
+        e.preventDefault();
+        var genresContainer = $('#genresContainer');
+        $.ajax({
+            url: "/Book/AddNewGenres",
+            type: "GET",
+            success: function (data) {
+                genresContainer.append(data);
+            }
+        })
+    });
+
+    $(document).on('click', "#btnDeleteGenres", function (e) {
+        e.preventDefault();;
+        $(this).parent().parent().remove()
+    })
+</script>
+

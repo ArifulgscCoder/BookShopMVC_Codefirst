@@ -1,0 +1,92 @@
+﻿@model PagedList.IPagedList<BookShopMVCmidExam_1280425.Models.Book>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "BookList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h2>BookList</h2>
+                <p>
+                    <a href="@Url.Action("Create","Book")" id="btnCreate" class="btn btn-warning">Add New Book</a>
+                </p>
+            </div>
+            @using (Html.BeginForm("BookList", "Book", FormMethod.Get))
+            {
+                <p>
+                    Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+                    <input type="submit" value="Search" />
+                </p>
+            }
+            <div class="card-body">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>
+                            @Html.ActionLink("BookName", "BookList", new { sortOrder = ViewBag.NameSortParm })
+                        </th>
+                        <th>
+                            @Html.ActionLink("AuthorName", "BookList", new { sortOrder = ViewBag.NameSortParm })
+                        </th>
+                        <th>
+                            @Html.ActionLink("PublishDate", "BookList", new { sortOrder = ViewBag.DateSortParm })
+                        </th>
+                        <th>
+                           Author Email
+                        </th>
+                        <th>
+                           In Stock
+                        </th>
+                        <th>
+                           Book  Price
+                        </th>
+                        <th>
+                           Book Picture
+                        </th>
+                        <th></th>
+                    </tr>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.BookName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AuthorName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PublishDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.EmailAddress)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.InStock)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Price)
+                            </td>
+                            <td>
+                                <img src="@item.Picture" width="60" height="60" class="rounded" />
+                            </td>
+                        </tr>
+                    }
+
+                </table>
+                <br />
+                Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                @Html.PagedListPager(Model, page => Url.Action("BookList", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+            </div>
+            <div class="card-footer">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+

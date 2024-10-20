@@ -1,0 +1,58 @@
+﻿@model IEnumerable<BookShopMVCmidExam_1280425.Models.Book>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Book Information</h2>
+<div class="d-flex justify-content-end mb-2">
+    <a href="@Url.Action("Create","Book")" id="btnCreate" class="btn btn-success">Create New Book</a>&nbsp;
+    <a href="@Url.Action("BookList","Book")" id="btnCreate" class="btn btn-primary">Book List</a>
+</div>
+<div>
+    @foreach (var book in Model)
+    {
+        <div class="card mb-2">
+            <div class="card-header d-flex justify-content-between">
+                <div>
+                    <img src="@book.Picture" width="100" height="100" class="rounded" /><br />
+                    <label class="mr-2"><b>Book Name: @Html.DisplayFor(x => book.BookName)</b></label><br />
+                    <label class="mr-2"><b>Author Name: @Html.DisplayFor(x => book.AuthorName)</b></label><br />
+                    <label class="mr-2"><b>Publish Date: @Html.DisplayFor(x => book.PublishDate)</b></label><br />
+                    <label class="mr-2"><b> Author Email: @Html.DisplayFor(x => book.EmailAddress)</b></label><br />
+                    <label class="mr-2"><b>Price: @Html.DisplayFor(x => book.Price)</b></label><br />
+                    <label class="mr-2"><b>Is Stocke? @Html.DisplayFor(x => book.InStock)</b></label><br />
+                </div>
+                <div>
+                    <a href="@Url.Action("Edit","Book", new {id=book.BookId})" class="btn btn-primary">Edit</a>
+                    <a href="@Url.Action("Delete","Book", new {id=book.BookId})" class="btn btn-danger">Delete</a>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <table class="table table-bordered table-striped table-sm">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Genre Id</th>
+                            <th>Genre Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in book.GenreEntries)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(x => item.Genre.GenreId)</td>
+                                <td>@Html.DisplayFor(x => item.Genre.GenreTitle)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>
+
+
+
+
+
